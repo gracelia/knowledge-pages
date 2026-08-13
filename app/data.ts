@@ -1,6 +1,8 @@
+export type Track = "business" | "technical";
+
 export type Topic = {
   slug: string;
-  category: "agent" | "project" | "system" | "algorithm";
+  category: Track;
   title: string;
   eyebrow: string;
   description: string;
@@ -9,63 +11,78 @@ export type Topic = {
 };
 
 export const categories = [
-  { id: "agent", index: "01", title: "Agent / AI 基础", short: "AGENT / AI", desc: "理解智能体从推理到执行的完整链路", count: 18 },
-  { id: "project", index: "02", title: "项目深挖", short: "项目深挖", desc: "把复杂经历讲成有判断力的项目故事", count: 12 },
-  { id: "system", index: "03", title: "系统设计 / 前端工程", short: "系统 / 前端", desc: "架构取舍、性能与工程化能力", count: 24 },
-  { id: "algorithm", index: "04", title: "算法", short: "算法", desc: "建立高频题型的稳定解题框架", count: 36 },
+  { id: "business", index: "01", title: "业务认知", short: "BUSINESS", desc: "站在产品视角理解问题、流程、逻辑与价值，再追问工程如何稳定承接。", count: 7 },
+  { id: "technical", index: "02", title: "技术能力", short: "TECHNOLOGY", desc: "从基础能力到系统设计与架构设计，建立可迁移、可落地的工程能力。", count: 25 },
 ] as const;
 
+export const businessDomains = [
+  { title: "金融", example: "花旗软件风控系统", focus: "风险识别、策略决策、合规与审计", slug: "financial-risk-control" },
+  { title: "消费", example: "消费者全链路", focus: "需求、决策、购买、履约与复购", slug: "consumer-business" },
+  { title: "零售", example: "百胜中国", focus: "门店、商品、库存、交易与会员", slug: "retail-business" },
+  { title: "能源", example: "供暖项目", focus: "供需调度、设备运行、能效与安全", slug: "heating-energy" },
+  { title: "医疗器械", example: "器械匀速相关", focus: "设备控制、临床流程、质量与合规", slug: "medical-device" },
+  { title: "AI 应用平台", example: "行业全流程模型方案", focus: "场景抽象、模型编排、交付与效果闭环", slug: "ai-application-platform" },
+  { title: "搜索", example: "搜索产品", focus: "意图理解、召回排序、体验与商业价值", slug: "search-business" },
+] as const;
+
+export const technicalGroups = [
+  { title: "基础能力", description: "理解原理、职责边界与常见取舍", items: ["AI / Agent：规划、LangChain、Tool、RAG", "前端：JavaScript、React、浏览器原理", "后端：Java、Spring Boot、FastAPI、并发与 IO", "数据库：MySQL、MongoDB、向量数据库", "网络与安全：HTTP、SSE、XSS", "算法与数据结构基础"] },
+  { title: "工程能力 · 系统设计", description: "从需求和约束出发，设计可演进的系统", items: ["权限管理与身份体系", "文件与对象存储系统", "协同编辑器系统", "部署与发布平台", "埋点与数据采集系统", "组件库与设计系统", "检索 / 搜索系统", "可观测性与稳定性体系"] },
+  { title: "架构能力", description: "处理跨模块、跨团队和长期演进问题", items: ["AI 助手架构", "AI 应用平台架构", "微前端与前端平台化", "微服务与分布式架构", "高可用、弹性与容灾", "业务迭代下的架构演进"] },
+] as const;
+
+const businessTemplate = (problem: string, flow: string, value: string, engineering: string) => [
+  { id: "problem", title: "核心问题", body: problem },
+  { id: "flow", title: "业务流程与关键角色", body: flow },
+  { id: "logic", title: "术语、规则与业务逻辑", body: "沉淀领域术语、核心实体、状态流转、规则边界与异常分支。重点说明规则为何存在，以及规则变化会影响哪些角色与环节。" },
+  { id: "value", title: "业务价值与衡量", body: value },
+  { id: "engineering", title: "工程如何承接", body: engineering, bullets: ["识别一致性、时效性、规模与合规约束", "将高频变化隔离为可配置规则或稳定领域模型", "用监控、降级、灰度和审计承接稳定性要求"] },
+];
+
 export const topics: Topic[] = [
-  {
-    slug: "agent-architecture", category: "agent", title: "Agent 架构与编排", eyebrow: "Agent / AI 基础",
-    description: "从单 Agent 到多 Agent：职责拆分、控制流与状态管理。", readTime: "8 分钟",
-    sections: [
-      { id: "definition", title: "什么是 Agent 架构", body: "Agent 架构描述模型如何感知上下文、形成计划、调用工具并根据结果继续决策。面试回答不要停在“LLM + Tool”，而要说清控制权在哪里、状态如何流动、失败如何收敛。" },
-      { id: "orchestration", title: "主 Agent 与子 Agent", body: "主 Agent 负责理解目标、拆解任务与验收结果；子 Agent 聚焦边界清晰的专业任务。拆分的核心不是角色数量，而是上下文隔离、能力复用和故障边界。", bullets: ["按领域能力拆分，而不是按页面拆分", "对子任务定义明确输入、输出与超时", "主 Agent 保留最终决策权和用户上下文"] },
-      { id: "tradeoffs", title: "常见取舍", body: "单 Agent 链路短、调试简单；多 Agent 更适合复杂并行任务，但会增加延迟、成本和不可预测性。应根据任务复杂度渐进演进，而不是一开始就多 Agent 化。" },
-      { id: "interview", title: "面试回答框架", body: "先讲业务目标，再讲为什么需要 Agent；随后画出控制流与状态流，解释关键取舍；最后用评估指标和线上问题证明方案有效。" },
-    ],
-  },
-  {
-    slug: "rag-retrieval", category: "agent", title: "RAG：切片、召回与重排", eyebrow: "Agent / AI 基础",
-    description: "围绕检索增强生成，建立从数据处理到效果评估的全链路认知。", readTime: "10 分钟",
-    sections: [
-      { id: "pipeline", title: "RAG 的完整链路", body: "离线侧完成解析、清洗、切片、向量化与索引；在线侧完成查询改写、混合召回、重排、上下文拼装和生成。每一步都应有可观测指标。" },
-      { id: "chunking", title: "如何设计切片", body: "切片不是固定字符截断。需要结合文档结构、语义完整性和模型上下文预算，保留标题路径与来源元数据。", bullets: ["结构化文档优先按标题层级切分", "表格和代码块保持整体语义", "用重叠窗口缓解边界信息丢失"] },
-      { id: "retrieval", title: "召回与 Rerank", body: "向量召回擅长语义相似，关键词召回擅长专有名词与精确匹配。混合召回提高覆盖率，再用重排模型把相关性强的片段送入上下文。" },
-      { id: "evaluation", title: "如何评估", body: "拆开评估检索与生成：关注 Recall@K、MRR、上下文相关性、答案忠实度和任务成功率，同时维护一组覆盖真实失败模式的回归集。" },
-    ],
-  },
-  {
-    slug: "d2c-agent", category: "project", title: "D2C 设计稿转码 Agent", eyebrow: "项目深挖",
-    description: "把核心 Agent 项目组织成结构清晰、经得住追问的项目故事。", readTime: "12 分钟",
-    sections: [
-      { id: "context", title: "背景与目标", body: "目标是把设计稿稳定转化为可维护的前端代码，减少从视觉交付到可运行页面之间的大量重复工作。难点不只是生成代码，而是理解设计语义、选择正确组件并保证工程可用。" },
-      { id: "architecture", title: "架构设计", body: "主 Agent 负责任务规划和结果验收，根据目标技术栈路由到专业子 Agent；RunContext 贯穿设计数据、组件约束与阶段产物，工具层隔离外部能力。" },
-      { id: "hard-parts", title: "关键难点", body: "设计稿信息密度高且存在歧义，需要在视觉还原、组件复用和代码质量之间平衡。通过组件知识检索、阶段化生成与校验闭环降低一次性生成的不确定性。", bullets: ["设计节点到语义组件的映射", "不同技术栈的生成策略隔离", "长上下文压缩与中间产物管理"] },
-      { id: "reflection", title: "复盘与演进", body: "下一步应把评估从主观验收升级为多维基准：视觉相似度、组件命中率、代码可运行率和人工修改成本，并用失败样本驱动提示词与工具迭代。" },
-    ],
-  },
-  {
-    slug: "frontend-system-design", category: "system", title: "前端系统设计方法", eyebrow: "系统设计 / 前端工程",
-    description: "从需求澄清到架构落地，建立可复用的系统设计回答框架。", readTime: "9 分钟",
-    sections: [
-      { id: "scope", title: "先定义问题边界", body: "先确认用户规模、核心场景、实时性、兼容性和团队约束。系统设计题没有唯一答案，面试官更关注你是否能主动澄清并做有依据的取舍。" },
-      { id: "layers", title: "分层思考", body: "从客户端体验、数据流、接口层、缓存与存储、部署和可观测性逐层展开。前端侧还要覆盖状态管理、组件边界、资源加载与异常恢复。" },
-      { id: "quality", title: "非功能性要求", body: "把性能、稳定性、安全、可访问性和可维护性变成可验证目标，而不是口号。", bullets: ["核心体验指标与性能预算", "灰度、降级和错误隔离", "日志、指标与链路追踪"] },
-      { id: "answer", title: "表达顺序", body: "需求与约束 → 核心数据模型 → 高层架构 → 关键链路 → 瓶颈与取舍 → 演进路线。每一层都回扣最初目标。" },
-    ],
-  },
-  {
-    slug: "sliding-window", category: "algorithm", title: "滑动窗口", eyebrow: "算法",
-    description: "识别连续区间题型，用一套模板处理窗口扩张与收缩。", readTime: "7 分钟",
-    sections: [
-      { id: "signal", title: "题型信号", body: "当题目要求在数组或字符串的连续区间中寻找最长、最短或满足条件的子区间时，优先考虑滑动窗口。" },
-      { id: "template", title: "通用框架", body: "右指针负责扩张并纳入新元素；当窗口不再合法时移动左指针收缩；在合法时机更新答案。关键是定义窗口状态和合法条件。" },
-      { id: "pitfalls", title: "常见错误", body: "最容易错在更新答案的时机、重复元素计数和窗口为空的边界。写代码前先用一句话定义窗口中保存的是什么。", bullets: ["明确是 while 收缩还是 if 收缩", "计数归零后及时移除键", "分清定长窗口与不定长窗口"] },
-      { id: "practice", title: "练习路径", body: "从无重复字符的最长子串开始，再练最小覆盖子串、长度最小的子数组，最后处理带权重或多条件约束的变体。" },
-    ],
-  },
+  { slug: "financial-risk-control", category: "business", title: "金融 · 风控系统", eyebrow: "业务认知 / 传统行业", description: "从风险识别到策略决策，理解风控系统为何存在、如何创造价值。", readTime: "12 分钟", sections: businessTemplate("在控制信用、欺诈与合规风险的同时，尽量减少对正常客户体验和业务增长的误伤。", "客户或交易进入 → 数据与特征准备 → 规则 / 模型判断 → 审批、拦截或人工复核 → 结果反馈与策略迭代。", "用损失率、通过率、误杀率、审批时延、人工复核成本等指标平衡风险与增长。", "核心难点是低延迟决策、数据一致性、规则可解释、全链路审计，以及策略快速迭代时不破坏线上稳定性。") },
+  { slug: "consumer-business", category: "business", title: "消费 · 用户全链路", eyebrow: "业务认知 / 传统行业", description: "围绕消费者从产生需求到复购的完整旅程理解产品价值。", readTime: "9 分钟", sections: businessTemplate("降低用户发现、决策和购买的成本，并持续建立信任和复购。", "触达 → 浏览与比较 → 决策 → 交易 → 履约 → 售后 → 复购与推荐。", "关注转化率、客单价、履约体验、留存、复购和客户终身价值。", "工程侧要支撑用户身份、商品内容、交易履约和增长实验的协同，同时避免局部优化损害整体体验。") },
+  { slug: "retail-business", category: "business", title: "零售 · 门店与会员", eyebrow: "业务认知 / 传统行业", description: "以百胜中国等连锁零售场景理解人、货、场的协同。", readTime: "11 分钟", sections: businessTemplate("在多门店、多渠道下，让商品供给、库存、交易和履约高效协同。", "选品与定价 → 采购与库存 → 到店 / 到家交易 → 制作或拣货 → 履约 → 会员运营。", "关注同店增长、库存周转、缺货率、履约时长、会员复购与门店效率。", "峰值交易、库存一致性、门店弱网、多渠道订单编排和区域差异化配置是核心工程难点。") },
+  { slug: "heating-energy", category: "business", title: "能源 · 智慧供暖", eyebrow: "业务认知 / 传统行业", description: "理解热源、管网、站点与用户之间的供需和调度。", readTime: "10 分钟", sections: businessTemplate("在满足室温与安全要求的前提下，降低能源消耗和人工运维成本。", "气象与需求预测 → 热源生产 → 管网输送 → 换热站调节 → 用户供热 → 监测与反馈。", "关注达标率、单位面积能耗、故障时长、投诉率和调度效率。", "工程需面对设备协议异构、时序数据、边缘断网、控制安全，以及算法建议与人工调度之间的责任边界。") },
+  { slug: "medical-device", category: "business", title: "医疗器械 · 设备控制", eyebrow: "业务认知 / 传统行业", description: "从临床使用与质量合规出发理解器械控制类产品。", readTime: "10 分钟", sections: businessTemplate("让设备在明确适用范围内稳定、准确、可追溯地完成临床或辅助任务。", "参数配置 → 自检与校准 → 运行控制 → 实时监测 → 告警与处置 → 记录留存。", "价值由准确性、稳定性、操作效率、安全事件率和可追溯性共同衡量。", "实时控制、软硬件协同、异常保护、数据完整性和变更验证通常比功能丰富度更重要。") },
+  { slug: "ai-application-platform", category: "business", title: "AI 应用平台", eyebrow: "业务认知 / 科技行业", description: "面向多行业定制全流程模型方案，沉淀平台化价值。", readTime: "12 分钟", sections: businessTemplate("把行业问题转化为可交付、可评估、可持续优化的 AI 工作流，而不只是一次模型调用。", "场景诊断 → 数据与知识接入 → 模型 / 工具编排 → 评估验收 → 发布运营 → 反馈迭代。", "关注交付周期、任务成功率、人工节省、推理成本、复用率和客户业务指标改善。", "难点在于行业差异与平台复用的平衡、模型不确定性、数据权限、全链路评估以及模型升级时的稳定迁移。") },
+  { slug: "search-business", category: "business", title: "搜索 · 信息获取", eyebrow: "业务认知 / 科技行业", description: "从用户意图到结果满意度，理解搜索的产品逻辑。", readTime: "10 分钟", sections: businessTemplate("帮助用户以更低成本获得可信、相关且可行动的信息。", "表达需求 → 意图理解 → 候选召回 → 排序与展现 → 点击 / 转化 → 反馈学习。", "关注成功搜索率、结果相关性、零结果率、改写率、点击满意度与任务完成率。", "工程上要平衡召回率、排序质量、索引新鲜度、延迟和成本，并为不同意图提供可解释的降级路径。") },
+  { slug: "agent-architecture", category: "technical", title: "AI / Agent 基础", eyebrow: "技术能力 / 基础能力", description: "规划、工具调用、RAG、记忆、评估与 Agent 编排。", readTime: "12 分钟", sections: [
+    { id: "model", title: "能力模型", body: "从模型能力、上下文、规划、工具、记忆和反馈闭环理解 Agent。边界不在“是否用了 LLM”，而在控制流如何推进、状态如何管理、失败如何收敛。" },
+    { id: "stack", title: "知识清单", body: "规划与任务拆解、LangChain 等编排框架、Tool 协议与权限、RAG 全链路、记忆机制、评估与可观测性。", bullets: ["单 Agent 与多 Agent 的适用边界", "结构化输出、重试与幂等", "模型、延迟、成本与效果取舍"] },
+    { id: "engineering", title: "工程化重点", body: "将不确定的模型能力包裹在可验证的流程中：输入输出有契约，工具调用有权限和审计，关键节点可回放，失败时能降级或转人工。" },
+    { id: "interview", title: "面试表达", body: "先讲业务目标，再画控制流与状态流；说明为何需要 Agent、关键取舍是什么，最后以离线评估和线上指标证明价值。" },
+  ] },
+  { slug: "frontend-foundation", category: "technical", title: "前端基础与工程", eyebrow: "技术能力 / 基础能力", description: "JavaScript、React、浏览器原理、性能与工程化。", readTime: "10 分钟", sections: [
+    { id: "language", title: "JavaScript", body: "执行上下文、作用域、原型、异步模型、事件循环、模块化与类型系统。" },
+    { id: "react", title: "React", body: "渲染模型、状态与副作用、组件边界、并发特性、服务端与客户端职责。" },
+    { id: "browser", title: "浏览器原理", body: "导航、解析、渲染流水线、网络调度、缓存、安全边界和性能指标。" },
+    { id: "engineering", title: "工程化", body: "构建、测试、监控、性能预算、灰度发布和可访问性，最终都应回到用户体验和团队交付效率。" },
+  ] },
+  { slug: "backend-foundation", category: "technical", title: "后端与分布式基础", eyebrow: "技术能力 / 基础能力", description: "Java、Spring Boot、FastAPI、并发、IO 与分布式。", readTime: "12 分钟", sections: [
+    { id: "runtime", title: "语言与运行时", body: "Java / Python 语法、内存模型、异常、集合、泛型和运行时机制。" },
+    { id: "framework", title: "框架与职责边界", body: "Spring Boot、FastAPI 的请求链路、依赖注入、生命周期、中间件、事务和错误处理。" },
+    { id: "concurrency", title: "并发与 IO", body: "线程、线程池、锁、异步 IO、背压与资源隔离，并理解吞吐、延迟和一致性的取舍。" },
+    { id: "distributed", title: "分布式基础", body: "缓存、消息、幂等、分布式事务、一致性、限流、熔断与故障恢复。" },
+  ] },
+  { slug: "data-network-security", category: "technical", title: "数据、网络与安全", eyebrow: "技术能力 / 基础能力", description: "数据库、网络协议、安全与算法的共同底座。", readTime: "12 分钟", sections: [
+    { id: "database", title: "数据库", body: "MySQL、MongoDB 与向量数据库的数据模型、索引、事务、查询和适用边界。" },
+    { id: "network", title: "网络协议", body: "HTTP、长连接、SSE、WebSocket、缓存与代理，理解一次请求从客户端到服务端的完整链路。" },
+    { id: "security", title: "安全", body: "XSS（常误写为 XXS）、CSRF、注入、鉴权、密钥与数据保护；安全应进入设计阶段，而不是上线前补丁。" },
+    { id: "algorithm", title: "算法基础", body: "数组、链表、树、图、哈希、堆、排序、搜索、动态规划与复杂度分析。" },
+  ] },
+  { slug: "system-design", category: "technical", title: "系统设计方法", eyebrow: "技术能力 / 工程能力", description: "权限、文件、编辑器、部署、埋点和组件系统的统一设计框架。", readTime: "14 分钟", sections: [
+    { id: "method", title: "统一方法", body: "需求与约束 → 核心角色和流程 → 数据模型 → 高层架构 → 关键链路 → 非功能目标 → 取舍与演进。" },
+    { id: "systems", title: "重点题目", body: "权限管理、文件系统、协同编辑器、部署平台、埋点平台、组件库与设计系统。", bullets: ["补充：检索 / 搜索系统", "补充：通知与任务调度系统", "补充：可观测性与稳定性平台"] },
+    { id: "quality", title: "稳定承接业务", body: "把容量、延迟、一致性、安全、灰度、降级、容灾、可观测性和成本转化为可验证目标。" },
+    { id: "evolution", title: "承接业务迭代", body: "识别稳定内核与高频变化点，通过领域建模、配置化、契约和版本机制控制变化扩散。" },
+  ] },
+  { slug: "architecture-design", category: "technical", title: "架构设计与演进", eyebrow: "技术能力 / 架构能力", description: "AI 助手、AI 平台、微前端、微服务与高可用架构。", readTime: "14 分钟", sections: [
+    { id: "scope", title: "架构关注什么", body: "架构处理的是跨模块、跨团队和长期演进问题：边界、依赖、质量属性、交付方式和组织协作。" },
+    { id: "ai", title: "AI 架构", body: "AI 助手关注上下文、编排、工具、记忆、评估和安全；AI 应用平台还要解决多租户、资产复用、模型治理与行业交付。" },
+    { id: "frameworks", title: "常用架构形态", body: "微前端、模块化单体、微服务、事件驱动与分层架构。先说明问题，再选择形态，避免为了架构而架构。" },
+    { id: "evolution", title: "演进原则", body: "以当前约束下的最小可行架构起步，用指标识别瓶颈；通过清晰边界和迁移路径渐进拆分。" },
+  ] },
 ];
 
 export function getTopic(slug: string) { return topics.find((topic) => topic.slug === slug); }
