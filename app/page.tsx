@@ -34,7 +34,7 @@ export default function Home() {
       <div className="technical-ladder">
         {technicalGroups.map((group, index) => <article key={group.title}><span className="ladder-number">0{index + 1}</span><div><small>{index === 0 ? "FOUNDATION" : index === 1 ? "SYSTEM DESIGN" : "ARCHITECTURE"}</small><h3>{group.title}</h3><p>{group.description}</p></div><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}
       </div>
-      <div className="technical-links"><a href="/knowledge/agent-architecture">AI / Agent →</a><a href="/knowledge/frontend-foundation">前端 →</a><a href="/knowledge/backend-foundation">后端 →</a><a href="/knowledge/data-network-security">数据 / 网络 / 安全 →</a><a href="/knowledge/system-design">系统设计 →</a><a href="/knowledge/architecture-design">架构设计 →</a></div>
+      <div className="technical-links"><a href="/knowledge/agent-architecture">AI / Agent →</a><a href="/knowledge/rag-production">RAG 专题 →</a><a href="/knowledge/frontend-foundation">前端 →</a><a href="/knowledge/backend-foundation">后端 →</a><a href="/knowledge/data-network-security">数据 / 网络 / 安全 →</a><a href="/knowledge/system-design">系统设计 →</a><a href="/knowledge/architecture-design">架构设计 →</a></div>
     </section>
 
     <section className="method-section" id="progress"><p className="kicker">HOW TO GROW</p><h2>后续内容如何持续落盘</h2><div className="method-grid"><div><b>01</b><h3>先挂框架</h3><p>新项目或新知识先归入业务 / 技术主线，明确层级和边界。</p></div><div><b>02</b><h3>再填案例</h3><p>面试复盘后补充真实问题、方案、取舍、指标与失败经验。</p></div><div><b>03</b><h3>建立连接</h3><p>把业务问题连接到系统设计，把技术方案回扣到业务价值。</p></div><div><b>04</b><h3>持续校正</h3><p>用追问和线上反馈暴露薄弱点，更新术语、逻辑和架构演进。</p></div></div></section>
