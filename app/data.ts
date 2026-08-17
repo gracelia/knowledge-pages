@@ -3,6 +3,7 @@ export type Track = "business" | "technical";
 export type Topic = {
   slug: string;
   category: Track;
+  group?: string;
   title: string;
   eyebrow: string;
   description: string;
@@ -14,6 +15,8 @@ export const categories = [
   { id: "business", index: "01", title: "业务认知", short: "BUSINESS", desc: "站在产品视角理解问题、流程、逻辑与价值，再追问工程如何稳定承接。", count: 7 },
   { id: "technical", index: "02", title: "技术能力", short: "TECHNOLOGY", desc: "从基础能力到系统设计与架构设计，建立可迁移、可落地的工程能力。", count: 25 },
 ] as const;
+
+export const technicalTopicGroups = ["AI / Agent 基础", "前端", "后端", "数据 / 网络 / 安全", "系统设计", "架构设计"] as const;
 
 export const businessDomains = [
   { title: "金融", example: "花旗软件风控系统", focus: "风险识别、策略决策、合规与审计", slug: "financial-risk-control" },
@@ -47,13 +50,13 @@ export const topics: Topic[] = [
   { slug: "medical-device", category: "business", title: "医疗器械 · 设备控制", eyebrow: "业务认知 / 传统行业", description: "从临床使用与质量合规出发理解器械控制类产品。", readTime: "10 分钟", sections: businessTemplate("让设备在明确适用范围内稳定、准确、可追溯地完成临床或辅助任务。", "参数配置 → 自检与校准 → 运行控制 → 实时监测 → 告警与处置 → 记录留存。", "价值由准确性、稳定性、操作效率、安全事件率和可追溯性共同衡量。", "实时控制、软硬件协同、异常保护、数据完整性和变更验证通常比功能丰富度更重要。") },
   { slug: "ai-application-platform", category: "business", title: "AI 应用平台", eyebrow: "业务认知 / 科技行业", description: "面向多行业定制全流程模型方案，沉淀平台化价值。", readTime: "12 分钟", sections: businessTemplate("把行业问题转化为可交付、可评估、可持续优化的 AI 工作流，而不只是一次模型调用。", "场景诊断 → 数据与知识接入 → 模型 / 工具编排 → 评估验收 → 发布运营 → 反馈迭代。", "关注交付周期、任务成功率、人工节省、推理成本、复用率和客户业务指标改善。", "难点在于行业差异与平台复用的平衡、模型不确定性、数据权限、全链路评估以及模型升级时的稳定迁移。") },
   { slug: "search-business", category: "business", title: "搜索 · 信息获取", eyebrow: "业务认知 / 科技行业", description: "从用户意图到结果满意度，理解搜索的产品逻辑。", readTime: "10 分钟", sections: businessTemplate("帮助用户以更低成本获得可信、相关且可行动的信息。", "表达需求 → 意图理解 → 候选召回 → 排序与展现 → 点击 / 转化 → 反馈学习。", "关注成功搜索率、结果相关性、零结果率、改写率、点击满意度与任务完成率。", "工程上要平衡召回率、排序质量、索引新鲜度、延迟和成本，并为不同意图提供可解释的降级路径。") },
-  { slug: "agent-architecture", category: "technical", title: "AI / Agent 基础", eyebrow: "技术能力 / 基础能力", description: "规划、工具调用、RAG、记忆、评估与 Agent 编排。", readTime: "12 分钟", sections: [
+  { slug: "agent-architecture", category: "technical", group: "AI / Agent 基础", title: "Agent 基础与架构", eyebrow: "技术能力 / AI / AGENT 基础", description: "规划、工具调用、记忆、评估与 Agent 编排。", readTime: "12 分钟", sections: [
     { id: "model", title: "能力模型", body: "从模型能力、上下文、规划、工具、记忆和反馈闭环理解 Agent。边界不在“是否用了 LLM”，而在控制流如何推进、状态如何管理、失败如何收敛。" },
     { id: "stack", title: "知识清单", body: "规划与任务拆解、LangChain 等编排框架、Tool 协议与权限、RAG 全链路、记忆机制、评估与可观测性。", bullets: ["单 Agent 与多 Agent 的适用边界", "结构化输出、重试与幂等", "模型、延迟、成本与效果取舍"] },
     { id: "engineering", title: "工程化重点", body: "将不确定的模型能力包裹在可验证的流程中：输入输出有契约，工具调用有权限和审计，关键节点可回放，失败时能降级或转人工。" },
     { id: "interview", title: "面试表达", body: "先讲业务目标，再画控制流与状态流；说明为何需要 Agent、关键取舍是什么，最后以离线评估和线上指标证明价值。" },
   ] },
-  { slug: "rag-production", category: "technical", title: "RAG：从检索到生产落地", eyebrow: "技术能力 / AI ENGINEERING", description: "完整掌握数据处理、混合检索、重排、生成、评估与生产优化。", readTime: "28 分钟", sections: [
+  { slug: "rag-production", category: "technical", group: "AI / Agent 基础", title: "RAG：从检索到生产落地", eyebrow: "技术能力 / AI / AGENT 基础 / RAG", description: "完整掌握数据处理、混合检索、重排、生成、评估与生产优化。", readTime: "28 分钟", sections: [
     { id: "why", title: "为什么需要 RAG", body: "RAG（Retrieval-Augmented Generation，检索增强生成）在生成答案前，先从外部知识库取得证据，再让模型基于证据回答。它主要解决模型知识滞后、企业私有知识不可见和无依据生成的问题。核心变化是从“依赖模型参数记忆知识”转为“运行时查询知识”。", bullets: ["RAG 适合补充频繁更新或私有的事实知识", "微调更适合改变输出风格、行为模式或专项能力", "RAG 能降低幻觉风险，但不能天然消灭幻觉"] },
     { id: "boundary", title: "先分清：RAG、Memory 与 Tool", body: "RAG 解决“去哪里找到回答所需知识”；Memory 解决“如何保留一次任务或长期交互中的状态与偏好”；Tool 解决“如何执行外部动作或获取实时结构化数据”。滑动窗口与摘要记忆属于上下文管理，不是 RAG 的检索效率优化。", bullets: ["RAG：产品文档、代码库、制度与知识检索", "Memory：最近对话、任务状态、用户偏好", "Tool：查数据库、调用 API、执行搜索或修改外部系统"] },
     { id: "architecture", title: "整体架构：离线建库 + 在线问答", body: "离线链路负责把原始资料转成可检索资产：加载 → 解析 → 清洗 → 切片 → 向量化 → 建索引。在线链路负责完成一次问答：查询理解 → 权限与元数据过滤 → 多路召回 → 融合与重排 → 上下文组装 → 生成 → 引用与反馈。两条链路要分别监控、分别评估。", bullets: ["离线关注数据质量、索引新鲜度和增量更新", "在线关注召回质量、端到端延迟、成本和答案可信度", "文档、Chunk、索引版本必须可追踪，才能定位线上问题"] },
@@ -70,31 +73,31 @@ export const topics: Topic[] = [
     { id: "demo", title: "项目 Demo：Personal Knowledge Assistant", body: "做一个可上传 PDF / Markdown 的个人知识助手。后端用 FastAPI，前端用 React；离线任务完成解析、结构化切片、Embedding 与向量入库；在线接口执行权限过滤、BM25 + Vector 混合召回、RRF 融合、Rerank、证据门控和带引用回答。项目重点不是跑通调用，而是能测量、解释和迭代。", bullets: ["核心模块：loader、parser、splitter、indexer、retriever、reranker、generator、evaluator", "提供 /documents、/index-jobs、/query、/feedback 与 /evaluation 接口", "记录检索候选、分数、最终上下文、引用、耗时和 token 成本", "准备一组 30～100 条评估问题，对比纯向量、Hybrid、Rerank 的增益"] },
     { id: "interview", title: "面试回答框架与高频追问", body: "回答 RAG 设计题时按“业务目标与知识边界 → 离线 / 在线架构 → 数据与切片 → 检索与重排 → 拒答与权限 → 评估指标 → 性能和演进”展开。任何优化都要说明解决什么失败模式、牺牲什么，以及如何用数据验证。", bullets: ["为什么不用微调？知识更新与私有事实更适合 RAG，能力和风格改变更适合微调", "最大难点是什么？数据质量、召回质量、上下文污染、幻觉与权限", "如何提升效果？数据治理 → Chunk → Filter → Hybrid → Rerank → Evaluation", "如何判断好不好？检索、生成、线上业务与成本指标必须同时观察"] },
   ] },
-  { slug: "frontend-foundation", category: "technical", title: "前端基础与工程", eyebrow: "技术能力 / 基础能力", description: "JavaScript、React、浏览器原理、性能与工程化。", readTime: "10 分钟", sections: [
+  { slug: "frontend-foundation", category: "technical", group: "前端", title: "前端基础与工程", eyebrow: "技术能力 / 基础能力", description: "JavaScript、React、浏览器原理、性能与工程化。", readTime: "10 分钟", sections: [
     { id: "language", title: "JavaScript", body: "执行上下文、作用域、原型、异步模型、事件循环、模块化与类型系统。" },
     { id: "react", title: "React", body: "渲染模型、状态与副作用、组件边界、并发特性、服务端与客户端职责。" },
     { id: "browser", title: "浏览器原理", body: "导航、解析、渲染流水线、网络调度、缓存、安全边界和性能指标。" },
     { id: "engineering", title: "工程化", body: "构建、测试、监控、性能预算、灰度发布和可访问性，最终都应回到用户体验和团队交付效率。" },
   ] },
-  { slug: "backend-foundation", category: "technical", title: "后端与分布式基础", eyebrow: "技术能力 / 基础能力", description: "Java、Spring Boot、FastAPI、并发、IO 与分布式。", readTime: "12 分钟", sections: [
+  { slug: "backend-foundation", category: "technical", group: "后端", title: "后端与分布式基础", eyebrow: "技术能力 / 基础能力", description: "Java、Spring Boot、FastAPI、并发、IO 与分布式。", readTime: "12 分钟", sections: [
     { id: "runtime", title: "语言与运行时", body: "Java / Python 语法、内存模型、异常、集合、泛型和运行时机制。" },
     { id: "framework", title: "框架与职责边界", body: "Spring Boot、FastAPI 的请求链路、依赖注入、生命周期、中间件、事务和错误处理。" },
     { id: "concurrency", title: "并发与 IO", body: "线程、线程池、锁、异步 IO、背压与资源隔离，并理解吞吐、延迟和一致性的取舍。" },
     { id: "distributed", title: "分布式基础", body: "缓存、消息、幂等、分布式事务、一致性、限流、熔断与故障恢复。" },
   ] },
-  { slug: "data-network-security", category: "technical", title: "数据、网络与安全", eyebrow: "技术能力 / 基础能力", description: "数据库、网络协议、安全与算法的共同底座。", readTime: "12 分钟", sections: [
+  { slug: "data-network-security", category: "technical", group: "数据 / 网络 / 安全", title: "数据、网络与安全", eyebrow: "技术能力 / 基础能力", description: "数据库、网络协议、安全与算法的共同底座。", readTime: "12 分钟", sections: [
     { id: "database", title: "数据库", body: "MySQL、MongoDB 与向量数据库的数据模型、索引、事务、查询和适用边界。" },
     { id: "network", title: "网络协议", body: "HTTP、长连接、SSE、WebSocket、缓存与代理，理解一次请求从客户端到服务端的完整链路。" },
     { id: "security", title: "安全", body: "XSS（常误写为 XXS）、CSRF、注入、鉴权、密钥与数据保护；安全应进入设计阶段，而不是上线前补丁。" },
     { id: "algorithm", title: "算法基础", body: "数组、链表、树、图、哈希、堆、排序、搜索、动态规划与复杂度分析。" },
   ] },
-  { slug: "system-design", category: "technical", title: "系统设计方法", eyebrow: "技术能力 / 工程能力", description: "权限、文件、编辑器、部署、埋点和组件系统的统一设计框架。", readTime: "14 分钟", sections: [
+  { slug: "system-design", category: "technical", group: "系统设计", title: "系统设计方法", eyebrow: "技术能力 / 工程能力", description: "权限、文件、编辑器、部署、埋点和组件系统的统一设计框架。", readTime: "14 分钟", sections: [
     { id: "method", title: "统一方法", body: "需求与约束 → 核心角色和流程 → 数据模型 → 高层架构 → 关键链路 → 非功能目标 → 取舍与演进。" },
     { id: "systems", title: "重点题目", body: "权限管理、文件系统、协同编辑器、部署平台、埋点平台、组件库与设计系统。", bullets: ["补充：检索 / 搜索系统", "补充：通知与任务调度系统", "补充：可观测性与稳定性平台"] },
     { id: "quality", title: "稳定承接业务", body: "把容量、延迟、一致性、安全、灰度、降级、容灾、可观测性和成本转化为可验证目标。" },
     { id: "evolution", title: "承接业务迭代", body: "识别稳定内核与高频变化点，通过领域建模、配置化、契约和版本机制控制变化扩散。" },
   ] },
-  { slug: "architecture-design", category: "technical", title: "架构设计与演进", eyebrow: "技术能力 / 架构能力", description: "AI 助手、AI 平台、微前端、微服务与高可用架构。", readTime: "14 分钟", sections: [
+  { slug: "architecture-design", category: "technical", group: "架构设计", title: "架构设计与演进", eyebrow: "技术能力 / 架构能力", description: "AI 助手、AI 平台、微前端、微服务与高可用架构。", readTime: "14 分钟", sections: [
     { id: "scope", title: "架构关注什么", body: "架构处理的是跨模块、跨团队和长期演进问题：边界、依赖、质量属性、交付方式和组织协作。" },
     { id: "ai", title: "AI 架构", body: "AI 助手关注上下文、编排、工具、记忆、评估和安全；AI 应用平台还要解决多租户、资产复用、模型治理与行业交付。" },
     { id: "frameworks", title: "常用架构形态", body: "微前端、模块化单体、微服务、事件驱动与分层架构。先说明问题，再选择形态，避免为了架构而架构。" },

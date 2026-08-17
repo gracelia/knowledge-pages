@@ -1,0 +1,4 @@
+.side-subgroup{margin:12px 0 18px 18px}
+.side-subgroup p{margin:0 0 5px 10px;font-size:9px;letter-spacing:.08em;color:#7e8983}
+.side-subgroup>a{display:block;padding:7px 10px;margin:1px 0;font-size:11px;color:var(--muted);border-left:1px solid var(--line)}
+.side-subgroup>a.active{color:var(--ink);border-left:2px solid var(--technical);background:#e7ecec;font-weight:bold}

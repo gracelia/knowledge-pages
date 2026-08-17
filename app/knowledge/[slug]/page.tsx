@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { categories, getCategory, getTopic, topics } from "../../data";
+import { categories, getCategory, getTopic, technicalTopicGroups, topics } from "../../data";
 import { SiteHeader } from "../../SiteHeader";
 
 export function generateStaticParams() { return topics.map((topic) => ({ slug: topic.slug })); }
@@ -18,12 +18,15 @@ export default async function KnowledgePage({ params }: { params: Promise<{ slug
         <p className="side-label">题库目录</p>
         {categories.map((item) => <div className="side-group" key={item.id}>
           <div className={`side-title ${item.id}`}><span>{item.index}</span><b>{item.title}</b></div>
-          {topics.filter((t) => t.category === item.id).map((t) => <a className={t.slug === slug ? "active" : ""} key={t.slug} href={`/knowledge/${t.slug}`}>{t.title}</a>)}
+          {item.id === "technical" ? technicalTopicGroups.map((group) => <div className="side-subgroup" key={group}>
+            <p>{group}</p>
+            {topics.filter((t) => t.category === item.id && t.group === group).map((t) => <a className={t.slug === slug ? "active" : ""} key={t.slug} href={`/knowledge/${t.slug}`}>{t.title}</a>)}
+          </div>) : topics.filter((t) => t.category === item.id).map((t) => <a className={t.slug === slug ? "active" : ""} key={t.slug} href={`/knowledge/${t.slug}`}>{t.title}</a>)}
           {topics.filter((t) => t.category === item.id).length === 0 && <span className="coming">内容整理中</span>}
         </div>)}
       </aside>
       <article className="doc-content">
-        <div className="breadcrumbs"><a href="/">知识图谱</a><span>/</span><span>{category.title}</span></div>
+        <div className="breadcrumbs"><a href="/">知识图谱</a><span>/</span><span>{category.title}</span>{topic.group && <><span>/</span><span>{topic.group}</span></>}</div>
         <p className={`doc-eyebrow ${topic.category}`}><span>●</span>{topic.eyebrow}</p>
         <h1>{topic.title}</h1>
         <p className="doc-lead">{topic.description}</p>
