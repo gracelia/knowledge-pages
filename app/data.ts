@@ -73,6 +73,7 @@ export const topics: Topic[] = [
     { id: "demo", title: "项目 Demo：Personal Knowledge Assistant", body: "做一个可上传 PDF / Markdown 的个人知识助手。后端用 FastAPI，前端用 React；离线任务完成解析、结构化切片、Embedding 与向量入库；在线接口执行权限过滤、BM25 + Vector 混合召回、RRF 融合、Rerank、证据门控和带引用回答。项目重点不是跑通调用，而是能测量、解释和迭代。", bullets: ["核心模块：loader、parser、splitter、indexer、retriever、reranker、generator、evaluator", "提供 /documents、/index-jobs、/query、/feedback 与 /evaluation 接口", "记录检索候选、分数、最终上下文、引用、耗时和 token 成本", "准备一组 30～100 条评估问题，对比纯向量、Hybrid、Rerank 的增益"] },
     { id: "interview", title: "面试回答框架与高频追问", body: "回答 RAG 设计题时按“业务目标与知识边界 → 离线 / 在线架构 → 数据与切片 → 检索与重排 → 拒答与权限 → 评估指标 → 性能和演进”展开。任何优化都要说明解决什么失败模式、牺牲什么，以及如何用数据验证。", bullets: ["为什么不用微调？知识更新与私有事实更适合 RAG，能力和风格改变更适合微调", "最大难点是什么？数据质量、召回质量、上下文污染、幻觉与权限", "如何提升效果？数据治理 → Chunk → Filter → Hybrid → Rerank → Evaluation", "如何判断好不好？检索、生成、线上业务与成本指标必须同时观察"] },
   ] },
+  { slug: "openclaw-architecture", category: "technical", group: "架构设计", title: "OpenClaw 架构深度研究", eyebrow: "技术能力 / 架构设计 / AI 助手", description: "从 Gateway、Agent Runtime、多通道、插件、MCP、上下文压缩与安全体系，拆解本地优先 AI 助手架构。", readTime: "35 分钟", sections: [] },
   { slug: "frontend-foundation", category: "technical", group: "前端", title: "前端基础与工程", eyebrow: "技术能力 / 基础能力", description: "JavaScript、React、浏览器原理、性能与工程化。", readTime: "10 分钟", sections: [
     { id: "language", title: "JavaScript", body: "执行上下文、作用域、原型、异步模型、事件循环、模块化与类型系统。" },
     { id: "react", title: "React", body: "渲染模型、状态与副作用、组件边界、并发特性、服务端与客户端职责。" },
