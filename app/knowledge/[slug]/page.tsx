@@ -5,6 +5,7 @@ import { categories, getCategory, getTopic, technicalTopicGroups, topics } from 
 import { SiteHeader } from "../../SiteHeader";
 import ragMarkdownSource from "../../content/rag-production.md?raw";
 import openClawMarkdownSource from "../../content/openclaw-architecture.md?raw";
+import deepSeekHarnessMarkdownSource from "../../content/deepseek-harness-architecture.md?raw";
 
 function headingId(value: string) {
   return value.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, "").trim().replace(/\s+/g, "-");
@@ -47,6 +48,7 @@ function prepareMarkdown(source: string) {
 const markdownTopics: Record<string, string> = {
   "rag-production": prepareMarkdown(ragMarkdownSource),
   "openclaw-architecture": prepareMarkdown(openClawMarkdownSource),
+  "deepseek-harness-architecture": prepareMarkdown(deepSeekHarnessMarkdownSource),
 };
 
 function markdownHeadings(markdown: string) {
