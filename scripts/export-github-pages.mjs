@@ -6,7 +6,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const output = resolve(root, "github-pages");
 const basePath = "/knowledge-pages";
 const source = await readFile(resolve(root, "app/data.ts"), "utf8");
-const slugs = [...new Set([...source.matchAll(/slug:\s*"([^"]+)"/g)].map((match) => match[1]))];
+const slugs = [...new Set([...source.matchAll(/"?slug"?\s*:\s*"([^"]+)"/g)].map((match) => match[1]))];
 
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });

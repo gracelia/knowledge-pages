@@ -1,62 +1,8 @@
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { categories, getCategory, getTopic, technicalTopicGroups, topics } from "../../data";
 import { SiteHeader } from "../../SiteHeader";
-import ragMarkdownSource from "../../content/rag-production.md?raw";
-import openClawMarkdownSource from "../../content/openclaw-architecture.md?raw";
-import deepSeekHarnessMarkdownSource from "../../content/deepseek-harness-architecture.md?raw";
-
-function headingId(value: string) {
-  return value.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, "").trim().replace(/\s+/g, "-");
-}
-
-function normalizeSimpleTables(markdown: string) {
-  const lines = markdown.split("\n");
-  const result: string[] = [];
-
-  for (let index = 0; index < lines.length; index += 1) {
-    const header = lines[index];
-    const divider = lines[index + 1] ?? "";
-    if (/^\s{2}\S/.test(header) && /^\s{2}-+(?:\s+-+)+\s*$/.test(divider)) {
-      const headers = header.trim().split(/\s{2,}/);
-      result.push(`| ${headers.join(" | ")} |`);
-      result.push(`| ${headers.map(() => "---").join(" | ")} |`);
-      index += 2;
-      while (index < lines.length && /^\s{2}\S/.test(lines[index])) {
-        const cells = lines[index].trim().split(/\s{2,}/);
-        result.push(`| ${cells.join(" | ")} |`);
-        index += 1;
-      }
-      result.push("");
-      index -= 1;
-      continue;
-    }
-    result.push(header);
-  }
-
-  return result.join("\n");
-}
-
-function prepareMarkdown(source: string) {
-  return normalizeSimpleTables(source)
-  .replace(/^# .+\n+/, "")
-  .replace(/^# (\d+\.)/gm, "## $1")
-  .replace(/^## (\d+\.\d+)/gm, "### $1");
-}
-
-const markdownTopics: Record<string, string> = {
-  "rag-production": prepareMarkdown(ragMarkdownSource),
-  "openclaw-architecture": prepareMarkdown(openClawMarkdownSource),
-  "deepseek-harness-architecture": prepareMarkdown(deepSeekHarnessMarkdownSource),
-};
-
-function markdownHeadings(markdown: string) {
-  return [...markdown.matchAll(/^## (.+)$/gm)].map((match) => ({
-    title: match[1],
-    id: headingId(match[1]),
-  }));
-}
+import { KnowledgeArticle } from "../../KnowledgeArticle";
+import { getMarkdown, getMarkdownHeadings } from "../../markdown";
 
 export function generateStaticParams() { return topics.map((topic) => ({ slug: topic.slug })); }
 
@@ -64,8 +10,9 @@ export default async function KnowledgePage({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const topic = getTopic(slug);
   if (!topic) notFound();
-  const topicMarkdown = markdownTopics[topic.slug];
-  const topicHeadings = topicMarkdown ? markdownHeadings(topicMarkdown) : [];
+  const topicMarkdown = getMarkdown(topic.slug);
+  if (!topicMarkdown) notFound();
+  const topicHeadings = getMarkdownHeadings(topicMarkdown);
   const category = getCategory(topic.category)!;
   const categoryTopics = topics.filter((item) => item.category === topic.category);
   return <main className="docs-page">
@@ -90,21 +37,10 @@ export default async function KnowledgePage({ params }: { params: Promise<{ slug
         <p className="doc-lead">{topic.description}</p>
         <div className="doc-meta"><span>◷ {topic.readTime}</span><span>最后更新：今天</span><span>难度：中级</span></div>
         <div className="doc-note"><b>面试提示</b><p>回答时先给结论，再展开关键链路与取舍，最后用项目中的真实案例收束。</p></div>
-        {topicMarkdown ? <div className="markdown-content">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              h2: ({ children }) => <h2 id={headingId(String(children))}>{children}</h2>,
-              h3: ({ children }) => <h3 id={headingId(String(children))}>{children}</h3>,
-            }}
-          >{topicMarkdown}</ReactMarkdown>
-        </div> : topic.sections.map((section, index) => <section id={section.id} className="doc-section" key={section.id}>
-          <span className="section-number">0{index + 1}</span><h2>{section.title}</h2><p>{section.body}</p>
-          {section.bullets && <ul>{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
-        </section>)}
+        <KnowledgeArticle markdown={topicMarkdown} />
         <div className="doc-bottom"><span>这篇内容有帮助吗？</span><button>有帮助</button><button>需要补充</button></div>
       </article>
-      <aside className="toc"><p>本页目录</p>{topicMarkdown ? topicHeadings.map((heading) => <a key={heading.id} href={`#${heading.id}`}>{heading.title}</a>) : topic.sections.map((section) => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}<div className="toc-progress"><span>阅读进度</span><div><i style={{width: "42%"}}></i></div><small>42%</small></div></aside>
+      <aside className="toc"><p>本页目录</p>{topicHeadings.map((heading) => <a key={heading.id} href={`#${heading.id}`}>{heading.title}</a>)}<div className="toc-progress"><span>阅读进度</span><div><i style={{width: "42%"}}></i></div><small>42%</small></div></aside>
     </div>
     <div className="mobile-doc-nav">{categoryTopics.map((item) => <a className={item.slug === slug ? "active" : ""} key={item.slug} href={`/knowledge/${item.slug}`}>{item.title}</a>)}</div>
   </main>;
