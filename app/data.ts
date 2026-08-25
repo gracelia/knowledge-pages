@@ -19,7 +19,7 @@ export const categories = [
 export const technicalTopicGroups = ["AI / Agent 基础", "前端", "后端", "数据 / 网络 / 安全", "系统设计", "架构设计"] as const;
 
 export const businessDomains = [
-  { title: "金融", example: "花旗软件风控系统", focus: "风险识别、策略决策、合规与审计", slug: "financial-risk-control" },
+  { title: "金融", example: "银行风控系统", focus: "风险识别、策略决策、合规与审计", slug: "financial-risk-control" },
   { title: "消费", example: "消费者全链路", focus: "需求、决策、购买、履约与复购", slug: "consumer-business" },
   { title: "零售", example: "百胜中国", focus: "门店、商品、库存、交易与会员", slug: "retail-business" },
   { title: "能源", example: "供暖项目", focus: "供需调度、设备运行、能效与安全", slug: "heating-energy" },
